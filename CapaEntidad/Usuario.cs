@@ -16,6 +16,5 @@ namespace CapaEntidad
         public bool Reestablecer { get; set; }
         public bool Activo { get; set; } 
       
-    public string Tipo { get; set; }
 }
 }

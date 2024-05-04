@@ -11,6 +11,11 @@ namespace CapaPresentacionTienda
             bundles.Add(new Bundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
+            bundles.Add(new Bundle("~/bundles/complementos").Include(
+                       "~/Scripts/fontawesome/all.min.js",
+                       "~/Scripts/loadingoverlay/loadingoverlay.min.js",
+            "~/Scripts/sweetalert.min.js"));
+                       
             //bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
             //            "~/Scripts/jquery.validate*"));
 
@@ -22,7 +27,10 @@ namespace CapaPresentacionTienda
             bundles.Add(new Bundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.bundle.js"));
 
-            bundles.Add(new ScriptBundle("~/Content/css").Include("~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/Content/css").Include(
+                "~/Content/Site.css",
+                "~/Content/sweetalert.css"
+                ));
         }
     }
 }
