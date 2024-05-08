@@ -64,7 +64,7 @@ namespace CapaNegocio
                 smtp.Send(mail);
                 resultado = true;
             }
-            catch (Exception ex)
+            catch 
             {
                 resultado = false;
             }
