@@ -112,7 +112,6 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccesoController.cs" />
     <Compile Include="Controllers\TiendaController.cs" />
-    <Compile Include="Filter\ValidarSessionAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -139,8 +138,6 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\brands.css" />
     <Content Include="Content\brands.min.css" />
-    <Content Include="Content\estilos\style.css" />
-    <Content Include="Content\estilos\swiper-bundle.min.css" />
     <Content Include="Content\fontawesome.css" />
     <Content Include="Content\fontawesome.min.css" />
     <Content Include="Content\regular.css" />
@@ -198,8 +195,6 @@
     <Content Include="Scripts\fontawesome\solid.min.js" />
     <Content Include="Scripts\fontawesome\v4-shims.js" />
     <Content Include="Scripts\fontawesome\v4-shims.min.js" />
-    <Content Include="Scripts\javascript\script.js" />
-    <Content Include="Scripts\javascript\swiper-bundle.min.js" />
     <Content Include="Scripts\jquery-3.7.1.js" />
     <Content Include="Scripts\jquery-3.7.1.min.js" />
     <Content Include="Scripts\jquery-3.7.1.slim.js" />
@@ -247,9 +242,6 @@
     <Content Include="webfonts\fa-brands-400.eot" />
     <Content Include="Views\Tienda\DetalleProducto.cshtml" />
     <Content Include="Views\Tienda\Carrito.cshtml" />
-    <Content Include="Views\Tienda\PagoEfectuado.cshtml" />
-    <Content Include="Views\Tienda\MisCompras.cshtml" />
-    <Content Include="Views\Acceso\Home.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

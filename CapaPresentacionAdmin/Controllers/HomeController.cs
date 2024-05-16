@@ -14,7 +14,7 @@ namespace CapaPresentacionAdmin.Controllers
 {
     //con esto no podra acceder a ninguna de estas vistas si
     //en este caso su correo no se encuentra autorizado
-    
+    [Authorize]
     public class HomeController : Controller
     {
         public ActionResult Index()

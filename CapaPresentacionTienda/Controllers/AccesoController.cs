@@ -12,12 +12,6 @@ namespace CapaPresentacionTienda.Controllers
     public class AccesoController : Controller
     {
         // GET: Acceso
-
-        public ActionResult Home()
-        {
-            return View();
-        }
-
         public ActionResult Index()
         {
             return View();
