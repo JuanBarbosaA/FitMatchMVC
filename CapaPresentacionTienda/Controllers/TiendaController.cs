@@ -228,8 +228,7 @@ namespace CapaPresentacionTienda.Controllers
             return Json(new { lista = oLista }, JsonRequestBehavior.AllowGet);
         }
 
-        [ValidarSession]
-        [Authorize]
+
         public ActionResult Carrito()
         {
             return View();

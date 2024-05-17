@@ -1,113 +1,175 @@
 ﻿
 @{
     ViewBag.Title = "Carrito";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<head>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/sweetalert.css" rel="stylesheet" />
 
-<div class="container my-5">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <!--Detalle producto-->
-                        <div class="col-sm-9">
-                            <div class="me-2">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="ms-2 mt-2">Detalle Carrito</h5>
-                                    <a class="btn btn-primary" href="@Url.Action("Index","Tienda")"><i class="fas fa-cart-plus"></i> Seguir Comprando</a>
-                                </div>
-                                
-                                <hr class="mt-2 mb-2"/>
+    
+</head>
 
-                                <div id="productos-carrito">
-                                    <div class="card mb-2 card-producto">
-                                        <div class="card-body">
-                                            <div class="row">
+<body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="#!">Mi tienda</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="@Url.Action("Index","Tienda")">Inicio</a></li>
+                    @*<li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                            </ul>
+                        </li>*@
+                </ul>
+                <form class="d-flex">
 
-                                                <div class="col-sm-2 align-self-center d-flex justify-content-center">
-                                                    <img class="rounded" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" style="width:100px; height:100px" />
-                                                </div>
 
-                                                <div class="col-sm-4 align-self-center">
-                                                    <span class="font-wight-bold d-block">Marca</span>
-                                                    <span>Nombre Producto</span>
-                                                </div>
+                    @*Si no ha iniciado sesion entonces pinta boton que diga inicio sesion*@
+                    @if (Session["Cliente"] == null)
+                    {
+                        <a class="btn btn-outline-dark" aria-current="page" href="@Url.Action("Index","Acceso")"><i class="fas fa-sign-out-alt me-1"></i>Iniciar Sesión</a>
+                    }
+                    else
+                    {
+                        @*Mostrar carrito compras cuando haya iniciado sesion*@
+                        <a class="btn btn-outline-dark" href="@Url.Action("Carrito","Tienda")">
+                            <i class="fas fa-shopping-cart me-1"></i>
+                            Cart
+                            <span class="badge bg-dark text-white ms-1 rounded-pill" id="cantidadcarrito">0</span>
+                        </a>
 
-                                                <div class="col-sm-2 align-self-center">
-                                                    <span>Precio : S/. 1500</span>
-                                                </div>
+                        <ul class="navbar-nav ms-auto me-0 me-md-3 my-2 my-md-0">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#!"><b>@User.Identity.Name</b></a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("MisCompras","Tienda")">Mis Compras</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("CerrarSesion","Acceso")">Cerrar Sesión</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
 
-                                                <div class="col-sm-2 align-self-center">
-                                                    <div class="d-flex">
 
-                                                        <button class="btn btn-outline-secondary btn-restar rounded-0">
-                                                            <i class="fas fa-minus"></i>
-                                                        </button>
 
-                                                        <input class="form-control input-cantidad p-1 text-center rounded-0" disabled style="width:40px" />
-                                                        
-                                                        <button class="btn btn-outline-secondary btn-sumar rounded-0">
-                                                            <i class="fas fa-plus"></i>
-                                                        </button>
+                </form>
+            </div>
+        </div>
+    </nav>
 
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <!--Detalle producto-->
+                            <div class="col-sm-9">
+                                <div class="me-2">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="ms-2 mt-2">Detalle Carrito</h5>
+                                        <a class="btn btn-primary" href="@Url.Action("Index","Tienda")"><i class="fas fa-cart-plus"></i> Seguir Comprando</a>
+                                    </div>
+
+                                    <hr class="mt-2 mb-2" />
+
+                                    <div id="productos-carrito">
+                                        <div class="card mb-2 card-producto">
+                                            <div class="card-body">
+                                                <div class="row">
+
+                                                    <div class="col-sm-2 align-self-center d-flex justify-content-center">
+                                                        <img class="rounded" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" style="width:100px; height:100px" />
                                                     </div>
-                                                </div>
 
-                                                <div class="col-sm-2 align-self-center">
-                                                    <button class="btn btn-outline-danger btn-eliminar"><i class="far fa-trash-alt"></i> Eliminar</button>
-                                                </div>
+                                                    <div class="col-sm-4 align-self-center">
+                                                        <span class="font-wight-bold d-block">Marca</span>
+                                                        <span>Nombre Producto</span>
+                                                    </div>
 
+                                                    <div class="col-sm-2 align-self-center">
+                                                        <span>Precio : S/. 1500</span>
+                                                    </div>
+
+                                                    <div class="col-sm-2 align-self-center">
+                                                        <div class="d-flex">
+
+                                                            <button class="btn btn-outline-secondary btn-restar rounded-0">
+                                                                <i class="fas fa-minus"></i>
+                                                            </button>
+
+                                                            <input class="form-control input-cantidad p-1 text-center rounded-0" disabled style="width:40px" />
+
+                                                            <button class="btn btn-outline-secondary btn-sumar rounded-0">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm-2 align-self-center">
+                                                        <button class="btn btn-outline-danger btn-eliminar"><i class="far fa-trash-alt"></i> Eliminar</button>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
+
+                                    <div class="d-flex justify-content-end">
+                                        <label class="align-self-center"><b>Total: $/. <span id="total">0</span> </b></label>
+                                    </div>
+
+
+
                                 </div>
-
-
-                                <div class="d-flex justify-content-end">
-                                    <label class="align-self-center"><b>Total: $/. <span id="total">0</span> </b></label>
-                                </div>
-
-
-
                             </div>
-                        </div>
-                        <!--Detalle Envio-->
-                        <div class="col-sm-3">
-                            <div class="card">
-                                <div class="card-body bg-light">
-                                    <h5 class="card-title">Detalle Envio</h5>
-                                    <form>
-                                        <div class="mb-2">
-                                            <label for="cbodepartamento" class="form-label">Departamento: </label>
-                                            <select class="form-select form-select-sm" id="cbodepartamento"></select>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="cboprovincia" class="form-label">Provincia: </label>
-                                            <select class="form-select form-select-sm" id="cboprovincia"></select>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="cbodistrito" class="form-label">Distrito: </label>
-                                            <select class="form-select form-select-sm" id="cbodistrito"></select>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="exampleInputEmail1" class="form-label">Nombre Contacto: </label>
-                                            <input type="text" class="form-control form-control-sm" id="txtnombrecontacto" autocomplete="off" />
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="exampleInputEmail1" class="form-label">Direccion: </label>
-                                            <input type="text" class="form-control form-control-sm" id="txtdireccion" autocomplete="off" />
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="txttelefono" class="form-label">Telefono: </label>
-                                            <input type="text" class="form-control form-control-sm" id="txttelefono" autocomplete="off" />
-                                        </div>
-                                        <div class="d-grid">
-                                            <button class="btn btn-success" type="button" onclick="RealizarPago()">
-                                                <i class="fab fa-paypal"></i> Terminar y Procesar Pago
-                                            </button>
-                                        </div>
-                                    </form>
+                            <!--Detalle Envio-->
+                            <div class="col-sm-3">
+                                <div class="card">
+                                    <div class="card-body bg-light">
+                                        <h5 class="card-title">Detalle Envio</h5>
+                                        <form>
+                                            <div class="mb-2">
+                                                <label for="cbodepartamento" class="form-label">Departamento: </label>
+                                                <select class="form-select form-select-sm" id="cbodepartamento"></select>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label for="cboprovincia" class="form-label">Provincia: </label>
+                                                <select class="form-select form-select-sm" id="cboprovincia"></select>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label for="cbodistrito" class="form-label">Distrito: </label>
+                                                <select class="form-select form-select-sm" id="cbodistrito"></select>
+                                            </div>
+                                            <div class="mb-2">
+                                                <label for="exampleInputEmail1" class="form-label">Nombre Contacto: </label>
+                                                <input type="text" class="form-control form-control-sm" id="txtnombrecontacto" autocomplete="off" />
+                                            </div>
+                                            <div class="mb-2">
+                                                <label for="exampleInputEmail1" class="form-label">Direccion: </label>
+                                                <input type="text" class="form-control form-control-sm" id="txtdireccion" autocomplete="off" />
+                                            </div>
+                                            <div class="mb-2">
+                                                <label for="txttelefono" class="form-label">Telefono: </label>
+                                                <input type="text" class="form-control form-control-sm" id="txttelefono" autocomplete="off" />
+                                            </div>
+                                            <div class="d-grid">
+                                                <button class="btn btn-success" type="button" onclick="RealizarPago()">
+                                                    <i class="fab fa-paypal"></i> Terminar y Procesar Pago
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -116,13 +178,27 @@
             </div>
         </div>
     </div>
-</div>
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    <script src="~/Scripts/fontawesome/all.min.js"></script>
+    <script src="~/Scripts/loadingoverlay.min.js"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    <script src="~/Scripts/jquery-{version}.js"></script>
+
+
+
+</body>
+
 
 
 
 @section scripts {
-    
+
     <script>
+
+
+
+
 
 
         $(document).ready(function () {
@@ -512,4 +588,4 @@
 
     </script>
 
-    }
+}

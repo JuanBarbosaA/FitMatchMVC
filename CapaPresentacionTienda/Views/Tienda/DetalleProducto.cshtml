@@ -1,48 +1,124 @@
 ﻿@model CapaEntidad.Producto
 @{
     ViewBag.Title = "DetalleProducto";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<section class="py-5">
-    <div class="container px-4 px-lg-5 my-5">
-        <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="data:image/@Html.DisplayTextFor(m => m.Extension); base64, @Html.DisplayTextFor(m => m.Base64)" alt="..." /></div>
-            <div class="col-md-6">
-                <div class="small mb-1">Marca: @Html.DisplayTextFor(m => m.oMarca.Descripcion)</div>
-                <h1 class="display-5 fw-bolder">@Html.DisplayTextFor(m => m.Nombre)</h1>
-                <div class="fs-5 mb-5">
-                    @*<span class="text-decoration-line-through">$45.00</span>*@
-                    <span>@Html.DisplayTextFor(m => m.Precio) USD</span>
-                </div>
-                <p class="lead">@Html.DisplayTextFor(m => m.Descripcion)</p>
-                <div class="d-flex">
+<head>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/sweetalert.css" rel="stylesheet" />
 
-                    <a href="@Url.Action("Index","Tienda")" class="btn btn-danger w-50 text-center me-3">
 
-                        <i class="fas fa-undo-alt"></i> Volver
+</head>
 
-                    </a>
 
-                    @if (Session["Cliente"] != null)
+
+<body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="#!">Mi tienda</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="@Url.Action("Index","Tienda")">Inicio</a></li>
+                    @*<li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                            </ul>
+                        </li>*@
+                </ul>
+                <form class="d-flex">
+
+
+                    @*Si no ha iniciado sesion entonces pinta boton que diga inicio sesion*@
+                    @if (Session["Cliente"] == null)
                     {
-                        <button class="btn btn-success agregarcarrito flex-shink-0 w-50" type="button" data-idproducto="@Html.DisplayTextFor(m => m.IdProducto)">
-                            <i class="fas fa-cart-plus"></i>
-                            Agregar al carrito
-                        </button>
+                        <a class="btn btn-outline-dark" aria-current="page" href="@Url.Action("Index","Acceso")"><i class="fas fa-sign-out-alt me-1"></i>Iniciar Sesión</a>
+                    }
+                    else
+                    {
+                        @*Mostrar carrito compras cuando haya iniciado sesion*@
+                        <a class="btn btn-outline-dark" href="@Url.Action("Carrito","Tienda")">
+                            <i class="fas fa-shopping-cart me-1"></i>
+                            Cart
+                            <span class="badge bg-dark text-white ms-1 rounded-pill" id="cantidadcarrito">0</span>
+                        </a>
+
+                        <ul class="navbar-nav ms-auto me-0 me-md-3 my-2 my-md-0">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#!"><b>@User.Identity.Name</b></a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("MisCompras","Tienda")">Mis Compras</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("CerrarSesion","Acceso")">Cerrar Sesión</a></li>
+                                </ul>
+                            </li>
+                        </ul>
                     }
 
 
+
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="data:image/@Html.DisplayTextFor(m => m.Extension); base64, @Html.DisplayTextFor(m => m.Base64)" alt="..." /></div>
+                <div class="col-md-6">
+                    <div class="small mb-1">Marca: @Html.DisplayTextFor(m => m.oMarca.Descripcion)</div>
+                    <h1 class="display-5 fw-bolder">@Html.DisplayTextFor(m => m.Nombre)</h1>
+                    <div class="fs-5 mb-5">
+                        @*<span class="text-decoration-line-through">$45.00</span>*@
+                        <span>@Html.DisplayTextFor(m => m.Precio) USD</span>
+                    </div>
+                    <p class="lead">@Html.DisplayTextFor(m => m.Descripcion)</p>
+                    <div class="d-flex">
+
+                        <a href="@Url.Action("Index","Tienda")" class="btn btn-danger w-50 text-center me-3">
+
+                            <i class="fas fa-undo-alt"></i> Volver
+
+                        </a>
+
+                        @if (Session["Cliente"] != null)
+                        {
+                            <button class="btn btn-success agregarcarrito flex-shink-0 w-50" type="button" data-idproducto="@Html.DisplayTextFor(m => m.IdProducto)">
+                                <i class="fas fa-cart-plus"></i>
+                                Agregar al carrito
+                            </button>
+                        }
+
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    <script src="~/Scripts/fontawesome/all.min.js"></script>
+    <script src="~/Scripts/loadingoverlay.min.js"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    <script src="~/Scripts/jquery-{version}.js"></script>
+
+</body>
 
 
-@section scripts{
-    
-    <script>
+
+    @section scripts{
+
+        <script>
 
         $(document).on("click", "button.agregarcarrito", function () {
 
@@ -75,7 +151,7 @@
                             })*@
 
                             swal("", "Agregado al carrito", "success");
-        
+
                         } else {
                             swal("", data.mensaje, "warning");
                         }
@@ -84,6 +160,6 @@
 
         })
 
-    </script>
+        </script>
 
     }

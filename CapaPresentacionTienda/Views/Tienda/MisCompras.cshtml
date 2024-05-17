@@ -1,81 +1,154 @@
 ﻿@model List<CapaEntidad.DetalleVenta>
 @{
     ViewBag.Title = "MisCompras";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 
 
 }
+<head>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/sweetalert.css" rel="stylesheet" />
+</head>
 
 
-<div class="container">
 
-    <div class="row mt-5">
 
-        <div class="col-sm-12">
 
-            @{
+<body class="d-flex flex-column min-vh-100">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand" href="#!">Mi tienda</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="@Url.Action("Index","Tienda")">Inicio</a></li>
+                    @*<li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Shop</a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#!">All Products</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                                <li><a class="dropdown-item" href="#!">New Arrivals</a></li>
+                            </ul>
+                        </li>*@
+                </ul>
+                <form class="d-flex">
 
-                if (Model.Count > 0)
-                {
-                    foreach(var item in Model)
+
+                    @*Si no ha iniciado sesion entonces pinta boton que diga inicio sesion*@
+                    @if (Session["Cliente"] == null)
                     {
-                        <div class="row mb-3">
-                            <div class="col-sm-12">
-                                <div class="card">
-                                    <div class="card-body bg-light">
-                                        <h6>ID TRANSACCION: @item.IdTransaccion</h6>
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Imagen</th>
-                                                        <th>Producto</th>
-                                                        <th>Precio Unitario</th>
-                                                        <th>Cantidad</th>
-                                                        <th>Sub Total</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="bg-white">
-                                                    <tr>
-                                                        <td>
-                                                            <img class="card-img-top mb-5 mb-md-0" src="data:image/@item.oProducto.Extension;base64,@item.oProducto.Base64" style="width:120px;height:120px" />
-                                                        </td>
-                                                        <td valign="middle">
-                                                            @item.oProducto.Nombre
-                                                        </td>
-                                                        <td valign="middle">
-                                                            $ @item.oProducto.Precio USD
-                                                        </td>
-                                                        <td valign="middle">
-                                                            @item.Cantidad
-                                                        </td>
-                                                        <td valign="middle">
-                                                            $ @item.Total USD
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                        <a class="btn btn-outline-dark" aria-current="page" href="@Url.Action("Index","Acceso")"><i class="fas fa-sign-out-alt me-1"></i>Iniciar Sesión</a>
+                    }
+                    else
+                    {
+                        @*Mostrar carrito compras cuando haya iniciado sesion*@
+                        <a class="btn btn-outline-dark" href="@Url.Action("Carrito","Tienda")">
+                            <i class="fas fa-shopping-cart me-1"></i>
+                            Cart
+                            <span class="badge bg-dark text-white ms-1 rounded-pill" id="cantidadcarrito">0</span>
+                        </a>
+
+                        <ul class="navbar-nav ms-auto me-0 me-md-3 my-2 my-md-0">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item" href="#!"><b>@User.Identity.Name</b></a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("MisCompras","Tienda")">Mis Compras</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("CerrarSesion","Acceso")">Cerrar Sesión</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+
+
+
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <div class="container">
+
+        <div class="row mt-5">
+
+            <div class="col-sm-12">
+
+                @{
+
+                    if (Model.Count > 0)
+                    {
+                        foreach (var item in Model)
+                        {
+                            <div class="row mb-3">
+                                <div class="col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body bg-light">
+                                            <h6>ID TRANSACCION: @item.IdTransaccion</h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Imagen</th>
+                                                            <th>Producto</th>
+                                                            <th>Precio Unitario</th>
+                                                            <th>Cantidad</th>
+                                                            <th>Sub Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="bg-white">
+                                                        <tr>
+                                                            <td>
+                                                                <img class="card-img-top mb-5 mb-md-0" src="data:image/@item.oProducto.Extension;base64,@item.oProducto.Base64" style="width:120px;height:120px" />
+                                                            </td>
+                                                            <td valign="middle">
+                                                                @item.oProducto.Nombre
+                                                            </td>
+                                                            <td valign="middle">
+                                                                $ @item.oProducto.Precio USD
+                                                            </td>
+                                                            <td valign="middle">
+                                                                @item.Cantidad
+                                                            </td>
+                                                            <td valign="middle">
+                                                                $ @item.Total USD
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        }
+                    }
+
+                    else
+                    {
+                        <div class="row mb-3">
+                            <div class="col-sm-12 text-center">
+                                <h1>No se encontraron compras</h1>
+                            </div>
                         </div>
                     }
+
                 }
 
-                else
-                {
-                    <div class="row mb-3">
-                        <div class="col-sm-12 text-center">
-                            <h1>No se encontraron compras</h1>
-                        </div>
-                    </div>
-                }
-
-            }
+            </div>
 
         </div>
 
     </div>
 
-</div>
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    <script src="~/Scripts/fontawesome/all.min.js"></script>
+    <script src="~/Scripts/loadingoverlay.min.js"></script>
+    <script src="~/Scripts/sweetalert.min.js"></script>
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    <script src="~/Scripts/jquery-{version}.js"></script>
+
+</body>
