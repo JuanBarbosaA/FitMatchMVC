@@ -13,5 +13,6 @@ namespace CapaEntidad
         public Producto oProducto { get; set; }
         public int Cantidad { get; set; }
 
+
     }
 }
