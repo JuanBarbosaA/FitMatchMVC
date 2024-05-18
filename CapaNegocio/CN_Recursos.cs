@@ -25,17 +25,25 @@ namespace CapaNegocio
         //encriptacion de texto en sha256
         public static string ConvertirSha256(string texto)
         {
-            StringBuilder Sb = new StringBuilder();
-            //Usar la referencia de "System.Security.Cryptography"
+
+            byte[] salt;
+            new RNGCryptoServiceProvider().GetBytes(salt = new byte[16]);
+
+            byte[] textoConSal = Encoding.UTF8.GetBytes(texto).Concat(salt).ToArray();
+
             using(SHA256 hash = SHA256Managed.Create())
             {
-                Encoding enc = Encoding.UTF8;
-                byte[] result = hash.ComputeHash(enc.GetBytes(texto));
+                byte[] hashBytes = hash.ComputeHash(textoConSal);
 
-                foreach (byte b in result)
+                StringBuilder Sb = new StringBuilder();
+                foreach (byte b in hashBytes)
                     Sb.Append(b.ToString("x2"));
+                foreach (byte b in salt)
+                    Sb.Append(b.ToString("x2"));
+
+                return Sb.ToString();
             }
-            return Sb.ToString();
+
         }
 
 

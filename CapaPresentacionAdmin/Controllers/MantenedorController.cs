@@ -82,6 +82,7 @@ namespace CapaPresentacionAdmin.Controllers
 
         //*******MARCA*******
         #region MARCA
+
         [HttpGet]
         public JsonResult ListarMarcas()
         {
